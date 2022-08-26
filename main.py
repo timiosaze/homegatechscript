@@ -22,14 +22,14 @@ def inc() :
 def getAllSwitzerlandRentProperties():
     status("GETTING ALL SWITZERLAND RENT PROPERTIES.....")
     all_rent_switzerland = []
-    for page in range(1,3):
+    for page in range(1,2):
         # url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=
         # header = {
         # 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36',
         # 'referer':'https://www.google.com/'
         # }
         req = Request(
-            url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page),
+            url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=page&o=dateCreated-desc'.format(page),
             headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'}
         )
         # res = browser.get(url, headers=header)
