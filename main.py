@@ -22,14 +22,14 @@ def inc() :
 def getAllSwitzerlandRentProperties():
     status("GETTING ALL SWITZERLAND RENT PROPERTIES.....")
     all_rent_switzerland = []
-    for page in range(1,2):
+    for page in range(1,4):
         # url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=
         # header = {
         # 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36',
         # 'referer':'https://www.google.com/'
         # }
         req = Request(
-            url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=page&o=dateCreated-desc'.format(page),
+            url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
             headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'}
         )
         # res = browser.get(url, headers=header)
@@ -37,7 +37,7 @@ def getAllSwitzerlandRentProperties():
         time.sleep(1)
         soup = BeautifulSoup(html, "lxml")
         ids = []
-        for a in soup.find_all('a',attrs = {'data-test':'result-list-item'}):
+        for a in soup.find_all('a',attrs = {'class':'ListItem_itemLink_30Did'}):
             href = a['href']
             inc()
             status("gotten list " + str(count) + ": " + href)
@@ -105,7 +105,6 @@ def getAllData(section, country):
 
             
                 
-
 
 # start = time.time()
 getAllData("Rent", "Switzerland")
