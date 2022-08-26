@@ -22,7 +22,7 @@ def inc() :
 def getAllSwitzerlandRentProperties():
     status("GETTING ALL SWITZERLAND RENT PROPERTIES.....")
     all_rent_switzerland = []
-    for page in range(1,4):
+    for page in range(1,51):
         # url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=
         # header = {
         # 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36',
