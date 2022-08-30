@@ -5,8 +5,10 @@ import re
 from urllib.request import Request, urlopen
 import mysql.connector
 from urllib.parse import urlparse
+from fake_useragent import UserAgent
+ua = UserAgent()
 #MYSQL CONNECTION PARAMS
-cnx = mysql.connector.connect(host='localhost', user='python', password='password',database='homegatedb')
+cnx = mysql.connector.connect(host='localhost', user='root', password='password',database='homegatedb')
 cursor = cnx.cursor(buffered=True)
 start = time.time()
 
@@ -14,20 +16,17 @@ count = 0
 def status(str):
     print(str)
 
-def inc() : 
+def inc(): 
     global count 
     count += 1
 
 def getAllSwitzerlandRentProperties():
-    status("GETTING ALL SWITZERLAND RENT PROPERTIES.....")
     ids = []
-    for page in range(1,51):
-        
+    for page in range(1,2):    
         time.sleep(1)
-
         req = Request(
             url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
-            headers={'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2919.83 Safari/537.36'}
+            headers={'User-Agent': ua.random}
         )
         try:
             html = urlopen(req).read()
@@ -54,7 +53,7 @@ def getAllData(section, country):
             new_id = str(id)
             req = Request(
                 url = 'https://www.homegate.ch' + new_id + '',
-                headers={'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2919.83 Safari/537.36'}
+                headers={'User-Agent': ua.random}
             )
             try:
                 html = urlopen(req).read()
@@ -64,7 +63,14 @@ def getAllData(section, country):
                 html = urlopen(req).read()
             time.sleep(2)
             soup = BeautifulSoup(html, "lxml")
-            street = soup.find("address", attrs={'class':'AddressDetails_address_3Uq1m'}).text
+            street =""
+            try:
+                street = soup.find("address", attrs={'class':'AddressDetails_address_3Uq1m'}).text
+                a = street.split()
+                city = a[-1]
+            except:
+                street = ""
+                city =""
             keys = list()
             vals = list()
             attris = soup.find('div',attrs = {'class':'CoreAttributes_coreAttributes_2UrTf'})
@@ -96,8 +102,7 @@ def getAllData(section, country):
             outprice = soup.find('div',attrs = {'data-test':'costs'})
             innerprice = outprice.find('dl')
             price = innerprice.find('dd').text
-            a = street.split()
-            city = a[-1]
+           
             vals = (str(id),)
             cursor.execute('SELECT propertylink FROM properties WHERE propertylink = %s', vals)
             cnx.commit()
