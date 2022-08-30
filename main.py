@@ -45,8 +45,7 @@ def getAllSwitzerlandRentProperties():
     return ids
 
 def getAllData(section, country):
-    # ids = getAllSwitzerlandRentProperties()
-    ids = ['/rent/3002067412']
+    ids = getAllSwitzerlandRentProperties()
     
     status("GETTING ALL DATA FOR SWITZERLAND RENT PROPERTIES USING THEIR UNIQUE IDS....")
     for id in ids:
