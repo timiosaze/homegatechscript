@@ -47,7 +47,7 @@ def getAllSwitzerlandRentProperties():
         
         all_rent_switzerland.append(ids)
         status("appended page " + str(page))
-    return ids
+    return all_rent_switzerland
 
 def getAllData(section, country):
     ids = getAllSwitzerlandRentProperties()
