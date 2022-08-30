@@ -75,11 +75,14 @@ def getAllData(section, country):
                 vals.append(value.text)
             rentalpairs =  dict(zip(keys, vals))
             livingSpace = ""
+            typeProp = ""
+            roomsProp = ""
+            floorsProp = ""
             try:
-                typeProp = rentalpairs['Type:']
-                roomsProp = rentalpairs['No. of rooms:']
-                floorsProp = rentalpairs['Floor:']
-                livingSpace = rentalpairs['Surface living:']         
+                typeProp += rentalpairs['Type:']
+                roomsProp += rentalpairs['No. of rooms:']
+                floorsProp += rentalpairs['Floor:']
+                livingSpace += rentalpairs['Surface living:']         
             except KeyError:
                 print("error found")
             des = soup.find('section',attrs = {'class':'Description_description_2w_d-'})
