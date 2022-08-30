@@ -22,7 +22,7 @@ def inc():
 
 def getAllSwitzerlandRentProperties():
     ids = []
-    for page in range(1,2):    
+    for page in range(1,51):    
         time.sleep(1)
         req = Request(
             url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
@@ -45,7 +45,8 @@ def getAllSwitzerlandRentProperties():
     return ids
 
 def getAllData(section, country):
-    ids = getAllSwitzerlandRentProperties()
+    # ids = getAllSwitzerlandRentProperties()
+    ids = ['/rent/3002067412']
     
     status("GETTING ALL DATA FOR SWITZERLAND RENT PROPERTIES USING THEIR UNIQUE IDS....")
     for id in ids:
@@ -74,12 +75,21 @@ def getAllData(section, country):
             keys = list()
             vals = list()
             attris = soup.find('div',attrs = {'class':'CoreAttributes_coreAttributes_2UrTf'})
-            titles = attris.select('dl dt')
-            values = attris.select('dl dd')
-            for title in titles:
-                keys.append(title.text)
-            for value in values:
-                vals.append(value.text)
+            
+            try:
+                titles = attris.select('dl dt')
+                values = attris.select('dl dd')
+                for title in titles:
+                    keys.append(title.text)
+                for value in values:
+                    vals.append(value.text)
+            except: 
+                titles = attris.select('dl dt font font')
+                values = attris.select('dl dd font font')
+                for title in titles:
+                    keys.append(title.text)
+                for value in values:
+                    vals.append(value.text)
             rentalpairs =  dict(zip(keys, vals))
             livingSpace = ""
             typeProp = ""
