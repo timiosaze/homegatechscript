@@ -59,7 +59,8 @@ def getAllData(section, country):
             try:
                 html = urlopen(req).read()
             except:
-                time.sleep(1)
+                print("waiting for 3 minutes due to too many requests before continuing")
+                time.sleep(180)
                 html = urlopen(req).read()
             time.sleep(2)
             soup = BeautifulSoup(html, "lxml")
@@ -84,7 +85,7 @@ def getAllData(section, country):
                 floorsProp += rentalpairs['Floor:']
                 livingSpace += rentalpairs['Surface living:']         
             except KeyError:
-                print("error found")
+                why = "some ppt not found"
             des = soup.find('section',attrs = {'class':'Description_description_2w_d-'})
             description = des.find('h1').text
             try:
