@@ -23,13 +23,17 @@ def getAllSwitzerlandRentProperties():
     ids = []
     for page in range(1,51):
         
-        time.sleep(2)
+        time.sleep(1)
 
         req = Request(
             url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
             headers={'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2919.83 Safari/537.36'}
         )
-        html = urlopen(req).read()
+        try:
+            html = urlopen(req).read()
+        except:
+            time.sleep(1)
+            html = urlopen(req).read()
         soup = BeautifulSoup(html, "lxml")
         for a in soup.find_all('a',attrs = {'class':'ListItem_itemLink_30Did'}):
             href = a['href']
@@ -52,7 +56,11 @@ def getAllData(section, country):
                 url = 'https://www.homegate.ch' + new_id + '',
                 headers={'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2919.83 Safari/537.36'}
             )
-            html = urlopen(req).read()
+            try:
+                html = urlopen(req).read()
+            except:
+                time.sleep(1)
+                html = urlopen(req).read()
             time.sleep(2)
             soup = BeautifulSoup(html, "lxml")
             street = soup.find("address", attrs={'class':'AddressDetails_address_3Uq1m'}).text
