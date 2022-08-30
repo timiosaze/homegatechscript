@@ -30,7 +30,7 @@ def getAllSwitzerlandRentProperties():
         # 'referer':'https://www.google.com/'
         # }
         req = Request(
-            url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
+            url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc'
         )
         # res = browser.get(url, headers=header)
         html = urlopen(req).read()
@@ -57,8 +57,7 @@ def getAllData(section, country):
             start = time.time()
 
             req = Request(
-                url = 'https://www.homegate.ch' + str(id),
-                headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'}
+                url = 'https://www.homegate.ch' + str(id)
             )
             html = urlopen(req).read()
             soup = BeautifulSoup(html, "lxml")
