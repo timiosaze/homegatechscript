@@ -73,9 +73,8 @@ def getAllData(section, country):
                 city =""
             keys = list()
             vals = list()
-            attris = soup.find('div',attrs = {'class':'CoreAttributes_coreAttributes_2UrTf'})
-            
             try:
+                attris = soup.find('div',attrs = {'class':'CoreAttributes_coreAttributes_2UrTf'})
                 titles = attris.select('dl dt')
                 values = attris.select('dl dd')
                 for title in titles:
@@ -83,6 +82,7 @@ def getAllData(section, country):
                 for value in values:
                     vals.append(value.text)
             except: 
+                attris = soup.find('div',attrs = {'class':'CoreAttributes_coreAttributes_2UrTf'})
                 titles = attris.select('dl dt font font')
                 values = attris.select('dl dd font font')
                 for title in titles:
