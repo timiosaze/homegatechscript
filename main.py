@@ -6,6 +6,7 @@ from urllib.request import Request, urlopen
 import mysql.connector
 
 
+
 #MYSQL CONNECTION PARAMS
 cnx = mysql.connector.connect(host='localhost', user='python', password='password',database='homegatedb')
 cursor = cnx.cursor()
@@ -95,8 +96,8 @@ def getAllData(section, country):
             status("gotten data on property: " + description + " with unique id of ")
             end = time.time()
             print("time taken for  was :", end - start)
-            sql = 'INSERT INTO properties(section, country, street, city, typeProp, roomsProp, floorsProp, livingSpace, description, phonenumber,price) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-            sql_vals =  (section, country, street,city, typeProp, roomsProp, floorsProp, livingSpace, description, nom, price)
+            sql = 'INSERT INTO properties(section, country, street, city, typeProp, roomsProp, floorsProp, livingSpace, description, phonenumber,price,property_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+            sql_vals =  (section, country, street,city, typeProp, roomsProp, floorsProp, livingSpace, description, nom, price,id)
 
             cursor.execute(sql, sql_vals)
             cnx.commit()
