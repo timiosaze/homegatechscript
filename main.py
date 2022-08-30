@@ -4,10 +4,10 @@ import csv
 import re
 from urllib.request import Request, urlopen
 import mysql.connector
-# import pymysql
+
 
 #MYSQL CONNECTION PARAMS
-cnx = mysql.connector.connect(host='localhost', user='root', password='password',database='homegatedb')
+cnx = mysql.connector.connect(host='localhost', user='python', password='password',database='homegatedb')
 cursor = cnx.cursor()
 start = time.time()
 
@@ -101,6 +101,7 @@ def getAllData(section, country):
             cursor.execute(sql, sql_vals)
             cnx.commit()
             print("affected rows = " + str(cursor.rowcount))
+
 
 
             
