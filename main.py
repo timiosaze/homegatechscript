@@ -31,7 +31,6 @@ def getAllSwitzerlandRentProperties():
         # }
         req = Request(
             url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
-            headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'}
         )
         # res = browser.get(url, headers=header)
         html = urlopen(req).read()
