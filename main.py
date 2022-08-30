@@ -4,9 +4,7 @@ import csv
 import re
 from urllib.request import Request, urlopen
 import mysql.connector
-
-
-
+from urllib.parse import urlparse
 #MYSQL CONNECTION PARAMS
 cnx = mysql.connector.connect(host='localhost', user='python', password='password',database='homegatedb')
 cursor = cnx.cursor(buffered=True)
@@ -22,7 +20,7 @@ def inc() :
 
 def getAllSwitzerlandRentProperties():
     status("GETTING ALL SWITZERLAND RENT PROPERTIES.....")
-    all_rent_switzerland = []
+    ids = []
     for page in range(1,51):
         # url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=
         # header = {
@@ -37,7 +35,6 @@ def getAllSwitzerlandRentProperties():
         html = urlopen(req).read()
         time.sleep(1)
         soup = BeautifulSoup(html, "lxml")
-        ids = []
         for a in soup.find_all('a',attrs = {'class':'ListItem_itemLink_30Did'}):
             href = a['href']
             inc()
@@ -45,20 +42,18 @@ def getAllSwitzerlandRentProperties():
             ids.append(href)
 
         
-        all_rent_switzerland.append(ids)
         status("appended page " + str(page))
-    return all_rent_switzerland
+    return ids
 
 def getAllData(section, country):
     ids = getAllSwitzerlandRentProperties()
     
     status("GETTING ALL DATA FOR SWITZERLAND RENT PROPERTIES USING THEIR UNIQUE IDS....")
     for id in ids:
-        # if(index < 20):
             start = time.time()
-
+            new_id = str(id)
             req = Request(
-                url = 'https://www.homegate.ch' + str(id),
+                url = 'https://www.homegate.ch' + new_id + '',
                 headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'}
             )
             html = urlopen(req).read()
