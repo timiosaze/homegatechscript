@@ -8,8 +8,8 @@ import mysql.connector
 
 
 #MYSQL CONNECTION PARAMS
-cnx = mysql.connector.connect(host='localhost', user='python', password='password',database='homegatedb')
-cursor = cnx.cursor()
+cnx = mysql.connector.connect(host='localhost', user='root', password='password',database='homegatedb')
+cursor = cnx.cursor(buffered=True)
 start = time.time()
 
 count = 0
@@ -74,11 +74,12 @@ def getAllData(section, country):
             for value in values:
                 vals.append(value.text)
             rentalpairs =  dict(zip(keys, vals))
+            livingSpace = ""
             try:
                 typeProp = rentalpairs['Type:']
                 roomsProp = rentalpairs['No. of rooms:']
                 floorsProp = rentalpairs['Floor:']
-                livingSpace = rentalpairs['Surface living:']
+                livingSpace = rentalpairs['Surface living:']         
             except KeyError:
                 print("error found")
             des = soup.find('section',attrs = {'class':'Description_description_2w_d-'})
@@ -93,17 +94,22 @@ def getAllData(section, country):
             price = innerprice.find('dd').text
             a = street.split()
             city = a[-1]
-            status("gotten data on property: " + description + " with unique id of ")
-            end = time.time()
-            print("time taken for  was :", end - start)
-            sql = 'INSERT INTO properties(section, country, street, city, typeProp, roomsProp, floorsProp, livingSpace, description, phonenumber,price,property_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-            sql_vals =  (section, country, street,city, typeProp, roomsProp, floorsProp, livingSpace, description, nom, price,id)
-
-            cursor.execute(sql, sql_vals)
+            vals = (str(id),)
+            cursor.execute('SELECT propertylink FROM properties WHERE propertylink = %s', vals)
             cnx.commit()
-            print("affected rows = " + str(cursor.rowcount))
+            newcount = cursor.rowcount
+            if(newcount == 0):
+                sql = 'INSERT INTO properties(section, country, street, city, typeProp, roomsProp, floorsProp, livingSpace, description, phonenumber,price,propertylink) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+                sql_vals =  (section, country, street,city, typeProp, roomsProp, floorsProp, livingSpace, description, nom, price,str(id))
 
+                cursor.execute(sql, sql_vals)
+                cnx.commit()
+                print("affected rows = " + str(cursor.rowcount))
+            else:
+                print("Already in Database")
 
+    end = time.time()
+    print("time taken for  was :", end - start)
 
             
                 
@@ -111,66 +117,4 @@ def getAllData(section, country):
 # start = time.time()
 getAllData("Rent", "Switzerland")
 cursor.close()
-
-# end = time.time()
-# print("Time taken to get all properties ids", end-start)
-# print(streetname, " ", prop, " ", description, " ", phoneNumber, " ", price)
-# with open('links.txt', 'a') as f:
-#     for row in links:
-#         f.write('%s\n' % row)
-#     f.close()
-# browser.get('https://api.scrapingdog.com/scrape', params=payload)
-# browser.get(url)
-# c = browser.page_source
-# # print (resp.text)
-# # response = requests.get(url)
-# soup = BeautifulSoup(c, 'lxml')
-# # jsonStr = soup.find('script', attrs={'type':'application/ld+json'})
-# streetname = soup.find("address", attrs={'class':'AddressDetails_address_3Uq1m'}).text
-
-# attris = soup.find('div',attrs = {'class':'CoreAttributes_coreAttributes_2UrTf'})
-# prop = attris.find('dl').text
-# des = soup.find('section',attrs = {'class':'Description_description_2w_d-'})
-# description = des.find('h1').text
-# phoneNumber = soup.find('a',attrs = {'class':'HgPhoneButton_hgPhoneLink_2sHVG'})
-# nom = phoneNumber['href']
-# outprice = soup.find('div',attrs = {'data-test':'costs'})
-# innerprice = outprice.find('dl')
-# price = innerprice.find('dd').text
-
-# a = streetname.split()
-# cityname = a[-1]
-# browser.quit()
-# end = time.time()
-# header = []
-# content = []
-# header.append("street")
-# header.append("city")
-# content.append(streetname)
-# content.append(cityname)
-# one = re.findall(":(:?(\s\w+)|(\w+))", prop)
-# for x in one:
-#     content.append(x[0])
-# two = re.findall("(\w+):", prop)
-# for x in two:
-#     header.append(x)
-# header.append("description")
-# header.append("phone_no")
-# header.append("price")
-# content.append(description)
-# content.append(nom)
-# content.append(price)
-# # print(streetname, " ", prop, " ", description, " ", nom, " ", price)
-# count = 0
-# with open('data.csv', 'w', encoding='UTF8') as f:
-#     writer = csv.writer(f)
-
-#     # write the header
-#     writer.writerow(header)
-
-#     # write the data
-#     writer.writerow(content)
-#     f.close()
-
-# # print(end-start)
 
