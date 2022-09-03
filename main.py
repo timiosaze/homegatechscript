@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 from fake_useragent import UserAgent
 ua = UserAgent()
 #MYSQL CONNECTION PARAMS
-cnx = mysql.connector.connect(host='localhost', user='root', password='password',database='homegatedb')
+cnx = mysql.connector.connect(host='localhost', user='python', password='password',database='homegatedb')
 cursor = cnx.cursor(buffered=True)
 start = time.time()
 
