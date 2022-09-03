@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 from fake_useragent import UserAgent
 ua = UserAgent()
 #MYSQL CONNECTION PARAMS
-cnx = mysql.connector.connect(host='localhost', user='python', password='password',database='homegatedb')
+cnx = mysql.connector.connect(host='localhost', user='root', password='password',database='homegatedb')
 cursor = cnx.cursor(buffered=True)
 start = time.time()
 
@@ -22,7 +22,11 @@ def inc():
 
 def getAllSwitzerlandRentProperties():
     ids = []
-    for page in range(1,51):    
+    page = []
+    page = getTimeRange()
+    one = page[0]
+    two = page[1]
+    for page in range(one, two):    
         time.sleep(1)
         req = Request(
             url = 'https://www.homegate.ch/rent/real-estate/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
@@ -43,6 +47,13 @@ def getAllSwitzerlandRentProperties():
         
         status("appended page " + str(page))
     return ids
+
+def getTimeRange():
+    arr = []
+    timestamp = time.strftime('%H');
+    hour = int(timestamp)
+    arr = [1 + 2 * (hour - 1), 1 + 2 * (hour - 1) + 2]
+    return arr
 
 def getAllData(section, country):
     ids = getAllSwitzerlandRentProperties()
@@ -132,7 +143,8 @@ def getAllData(section, country):
             
                 
 
-# start = time.time()
+start = time.time()
 getAllData("Rent", "Switzerland")
 cursor.close()
 
+# print(getTimeRange())
