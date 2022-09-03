@@ -15,7 +15,7 @@ start = time.time()
 count = 0
 def status(str):
     print(str)
-
+    
 def inc(): 
     global count 
     count += 1
