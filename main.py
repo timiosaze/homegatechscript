@@ -15,7 +15,7 @@ start = time.time()
 count = 0
 def status(str):
     print(str)
-    
+
 def inc(): 
     global count 
     count += 1
@@ -48,6 +48,34 @@ def getAllSwitzerlandRentProperties():
         status("appended page " + str(page))
     return ids
 
+def getAllSwitzerlandBuyProperties():
+    ids = []
+    page = []
+    page = getTimeRange()
+    one = page[0]
+    two = page[1]
+    for page in range(one, two):    
+        time.sleep(1)
+        req = Request(
+            url = 'https://www.homegate.ch/buy/apartment/country-switzerland/matching-list?ep=' + str(page) + '&o=dateCreated-desc',
+            headers={'User-Agent': ua.random}
+        )
+        try:
+            html = urlopen(req).read()
+        except:
+            time.sleep(1)
+            html = urlopen(req).read()
+        soup = BeautifulSoup(html, "lxml")
+        for a in soup.find_all('a',attrs = {'class':'ListItem_itemLink_30Did'}):
+            href = a['href']
+            inc()
+            status("gotten list " + str(count) + ": " + href)
+            ids.append(href)
+
+        
+        status("appended page " + str(page))
+    return ids
+
 def getTimeRange():
     arr = []
     timestamp = time.strftime('%H');
@@ -55,8 +83,8 @@ def getTimeRange():
     arr = [1 + 2 * (hour - 1), 1 + 2 * (hour - 1) + 2]
     return arr
 
-def getAllData(section, country):
-    ids = getAllSwitzerlandRentProperties()
+def getAllData(section, country, props):
+    ids = props
     
     status("GETTING ALL DATA FOR SWITZERLAND RENT PROPERTIES USING THEIR UNIQUE IDS....")
     for id in ids:
@@ -84,6 +112,7 @@ def getAllData(section, country):
                 city =""
             keys = list()
             vals = list()
+            # CoreAttributes_coreAttributes_2UrTf
             try:
                 attris = soup.find('div',attrs = {'class':'CoreAttributes_coreAttributes_2UrTf'})
                 titles = attris.select('dl dt')
@@ -112,6 +141,7 @@ def getAllData(section, country):
                 livingSpace += rentalpairs['Surface living:']         
             except KeyError:
                 why = "some ppt not found"
+                # Description_description_2w_d-
             des = soup.find('section',attrs = {'class':'Description_description_2w_d-'})
             description = des.find('h1').text
             try:
@@ -144,7 +174,8 @@ def getAllData(section, country):
                 
 
 start = time.time()
-getAllData("Rent", "Switzerland")
+getAllData("Rent", "Switzerland", getAllSwitzerlandRentProperties())
+getAllData("Buy","Switzerland", getAllSwitzerlandBuyProperties())
 cursor.close()
 
 # print(getTimeRange())
